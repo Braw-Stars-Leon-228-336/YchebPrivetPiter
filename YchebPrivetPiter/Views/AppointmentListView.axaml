@@ -1,0 +1,119 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:controls="using:YchebPrivetPiter.Controls"
+             x:Class="YchebPrivetPiter.Views.AppointmentListView"
+             x:DataType="vm:AppointmentListViewModel">
+    <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,0,0,12">
+            <TextBlock Text="Записи на обслуживание" FontSize="22" FontWeight="Bold"
+                       Foreground="White" VerticalAlignment="Center"/>
+
+            <Button Grid.Column="1" Content="✎ Редактировать"
+                    Click="OnEditClick"
+                    Background="Transparent" Foreground="White"
+                    BorderBrush="#55FFFFFF" BorderThickness="1"
+                    Padding="14,6" Margin="0,0,8,0"/>
+
+            <Button Grid.Column="2" Content="🗑 Удалить"
+                    Click="OnDeleteClick"
+                    Background="Transparent" Foreground="#FFEF5350"
+                    BorderBrush="#FFEF5350" BorderThickness="1"
+                    Padding="14,6" Margin="0,0,8,0"/>
+
+            <Button Grid.Column="3" Content="+ Новая запись"
+                    Click="OnAddClick"
+                    Background="#FF7C4DFF" Foreground="White" Padding="14,6"/>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,12">
+            <TextBlock Text="Статус:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+            <ComboBox SelectedItem="{Binding StatusFilter, Mode=TwoWay}"
+                      ItemsSource="{Binding AllStatuses}"
+                      Width="180"/>
+
+            <TextBlock Text="Механик:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"
+                       Margin="12,0,0,0"/>
+            <ComboBox SelectedItem="{Binding MechanicFilter, Mode=TwoWay}"
+                      ItemsSource="{Binding Mechanics}"
+                      Width="200">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="d:Mechanic" x:DataType="d:Mechanic">
+                        <TextBlock Text="{Binding User.FullName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedAppointment}"
+                  DoubleTapped="OnRowDoubleTapped"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  RowBackground="Transparent">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="Дата и время" Width="180">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Appointment" x:DataType="d:Appointment">
+                            <TextBlock Text="{Binding ScheduledAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Клиент" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Appointment" x:DataType="d:Appointment">
+                            <TextBlock Text="{Binding Client.FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Авто" Width="180">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Appointment" x:DataType="d:Appointment">
+                            <TextBlock Text="{Binding Car.PlateNumber}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Услуга" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Appointment" x:DataType="d:Appointment">
+                            <TextBlock Text="{Binding Service.Name}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Механик" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Appointment" x:DataType="d:Appointment">
+                            <TextBlock Text="{Binding Mechanic.User.FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Статус" Width="140">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Appointment" x:DataType="d:Appointment">
+                            <TextBlock Text="{Binding Status}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <controls:Paginator DockPanel.Dock="Bottom" Margin="0,12,0,0"/>
+    </DockPanel>
+</UserControl>

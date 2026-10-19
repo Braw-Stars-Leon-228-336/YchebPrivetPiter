@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:controls="using:YchebPrivetPiter.Controls"
+             x:Class="YchebPrivetPiter.Views.WorkOrderListView"
+             x:DataType="vm:WorkOrderListViewModel">
+    <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,12">
+            <TextBlock Text="{Binding Header}" FontSize="22" FontWeight="Bold"
+                       Foreground="White" VerticalAlignment="Center"/>
+
+            <Button Grid.Column="1"
+                    Content="Открыть"
+                    Click="OnEditClick"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderBrush="#55FFFFFF"
+                    BorderThickness="1"
+                    Padding="14,6"
+                    Margin="0,0,8,0"/>
+
+            <Button Grid.Column="2"
+                    Content="+ Новый заказ-наряд"
+                    Click="OnAddClick"
+                    Background="#FF7C4DFF"
+                    Foreground="White"
+                    Padding="14,6"/>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
+            <TextBlock Text="Статус:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+            <ComboBox SelectedItem="{Binding StatusFilter}"
+                      ItemsSource="{Binding AllStatuses}"
+                      Width="200"/>
+            <CheckBox Content="Сначала новые" IsChecked="{Binding SortDesc}"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedWorkOrder}"
+                  DoubleTapped="OnRowDoubleTapped"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  RowBackground="Transparent">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="№" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:WorkOrder" x:DataType="d:WorkOrder">
+                            <TextBlock Text="{Binding WorkOrderId}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Открыт" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:WorkOrder" x:DataType="d:WorkOrder">
+                            <TextBlock Text="{Binding OpenedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Клиент" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:WorkOrder" x:DataType="d:WorkOrder">
+                            <TextBlock Text="{Binding Client.FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Авто" Width="180">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:WorkOrder" x:DataType="d:WorkOrder">
+                            <TextBlock Text="{Binding Car.PlateNumber}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Механик" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:WorkOrder" x:DataType="d:WorkOrder">
+                            <TextBlock Text="{Binding Mechanic.User.FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Статус" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:WorkOrder" x:DataType="d:WorkOrder">
+                            <TextBlock Text="{Binding Status}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <controls:Paginator DockPanel.Dock="Bottom" Margin="0,12,0,0"/>
+    </DockPanel>
+</UserControl>

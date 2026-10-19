@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YchebPrivetPiter.Controls.SearchBox"
+             x:Name="Root"
+             x:CompileBindings="False">
+    <Border Background="#33FFFFFF" CornerRadius="8" Padding="10,4" MinWidth="240">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Text="🔍" VerticalAlignment="Center"
+                       Margin="0,0,8,0" Opacity="0.7"/>
+
+            <TextBox Grid.Column="1"
+                     Text="{Binding #Root.Text, Mode=TwoWay}"
+                     Watermark="{Binding #Root.Watermark}"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     VerticalContentAlignment="Center"/>
+
+            <Button Grid.Column="2" Content="✕"
+                    Command="{Binding #Root.ClearCommand}"
+                    IsVisible="{Binding #Root.Text, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Background="Transparent" BorderThickness="0"
+                    Foreground="White" Opacity="0.6"
+                    Padding="6,0"/>
+        </Grid>
+    </Border>
+</UserControl>

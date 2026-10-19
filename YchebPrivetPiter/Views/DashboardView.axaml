@@ -1,0 +1,224 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:services="using:YchebPrivetPiter.Services"
+             x:Class="YchebPrivetPiter.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+    <ScrollViewer>
+        <StackPanel Spacing="16">
+
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Дашборд руководителя"
+                           FontSize="22" FontWeight="Bold" Foreground="White"/>
+                <Button Grid.Column="1" Content="Обновить"
+                        Command="{Binding RefreshCommand}"
+                        Background="#FF7C4DFF" Foreground="White" Padding="14,6"/>
+            </Grid>
+
+            <!-- ================= KPI ================= -->
+            <UniformGrid Columns="5" Rows="1">
+                <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16" Margin="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Заказов" Foreground="White" Opacity="0.7" FontSize="12"/>
+                        <TextBlock Text="{Binding OrdersCount}" Foreground="White"
+                                   FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16" Margin="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Выручка" Foreground="White" Opacity="0.7" FontSize="12"/>
+                        <TextBlock Text="{Binding Revenue, StringFormat='{}{0:N0} ₽'}"
+                                   Foreground="#FF4CD964"
+                                   FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16" Margin="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Средний чек" Foreground="White" Opacity="0.7" FontSize="12"/>
+                        <TextBlock Text="{Binding AverageRepair, StringFormat='{}{0:N0} ₽'}"
+                                   Foreground="White"
+                                   FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16" Margin="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Ниже минимума" Foreground="White" Opacity="0.7" FontSize="12"/>
+                        <TextBlock Text="{Binding LowStockCount}" Foreground="#FFEF5350"
+                                   FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16" Margin="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Средний рейтинг" Foreground="White" Opacity="0.7" FontSize="12"/>
+                        <TextBlock Text="{Binding AverageRating, StringFormat='{}{0:F1} ★'}"
+                                   Foreground="#FFF3CC8D" FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- ================= ГРАФИК ВЫРУЧКИ (ручная отрисовка) ================= -->
+            <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16">
+                <StackPanel Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="Выручка за последние 30 дней" Foreground="White"
+                                   FontWeight="Bold" FontSize="16"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Revenue, StringFormat='Всего: {0:N0} ₽'}"
+                                   Foreground="#FF4CD964" FontWeight="Bold"/>
+                    </Grid>
+
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled"
+                                  Height="260">
+                        <ItemsControl ItemsSource="{Binding RevenueBars}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="6"
+                                                VerticalAlignment="Bottom"
+                                                Margin="8,0,8,0"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid RowDefinitions="Auto,*,Auto" Width="36">
+                                        <!-- Значение над столбцом -->
+                                        <TextBlock Grid.Row="0"
+                                                   Text="{Binding Value, StringFormat='{}{0:N0}'}"
+                                                   Foreground="White" FontSize="10"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="0,0,0,4"/>
+
+                                        <!-- Столбец: растёт от низа -->
+                                        <Border Grid.Row="1"
+                                                Width="24"
+                                                Height="{Binding HeightPercent}"
+                                                MinHeight="2"
+                                                Background="#FF7C4DFF"
+                                                CornerRadius="4,4,0,0"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"
+                                                ToolTip.Tip="{Binding Value, StringFormat='{}{0:N0} ₽'}"/>
+
+                                        <!-- Подпись под столбцом -->
+                                        <TextBlock Grid.Row="2"
+                                                   Text="{Binding Label}"
+                                                   Foreground="White" Opacity="0.7"
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="0,4,0,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <TextBlock Text="Прокрутите вправо, чтобы увидеть остальные дни"
+                               Foreground="White" Opacity="0.5" FontSize="11"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= ТОП УСЛУГ ================= -->
+            <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Топ-5 услуг" Foreground="White"
+                               FontWeight="Bold" FontSize="16"/>
+                    <ItemsControl ItemsSource="{Binding TopServices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="services:TopServiceDto"
+                                          x:DataType="services:TopServiceDto">
+                                <Grid ColumnDefinitions="*,120,120" Margin="0,4">
+                                    <TextBlock Text="{Binding Name}" Foreground="White"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding TimesUsed, StringFormat='раз: {0}'}"
+                                               Foreground="White" Opacity="0.8"/>
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Revenue, StringFormat='{}{0:N0} ₽'}"
+                                               Foreground="#FF4CD964"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= ЗАГРУЗКА МЕХАНИКОВ ================= -->
+            <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Загруженность механиков" Foreground="White"
+                               FontWeight="Bold" FontSize="16"/>
+                    <ItemsControl ItemsSource="{Binding Workload}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="services:MechanicWorkloadDto"
+                                          x:DataType="services:MechanicWorkloadDto">
+                                <Grid ColumnDefinitions="*,120,120" Margin="0,4">
+                                    <TextBlock Text="{Binding MechanicName}" Foreground="White"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding OrdersCount, StringFormat='всего: {0}'}"
+                                               Foreground="White" Opacity="0.8"/>
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding CompletedCount, StringFormat='завершено: {0}'}"
+                                               Foreground="#FF4CD964"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= ПОВТОРНЫЕ КЛИЕНТЫ ================= -->
+            <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Клиенты с повторными обращениями" Foreground="White"
+                               FontWeight="Bold" FontSize="16"/>
+                    <ItemsControl ItemsSource="{Binding RepeatClients}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="services:RepeatClientDto"
+                                          x:DataType="services:RepeatClientDto">
+                                <Grid ColumnDefinitions="*,220,100" Margin="0,4">
+                                    <TextBlock Text="{Binding FullName}" Foreground="White"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Phone}"
+                                               Foreground="White" Opacity="0.7"/>
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Visits, StringFormat='визитов: {0}'}"
+                                               Foreground="#FF4CD964"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= ЗАПЧАСТИ НИЖЕ МИНИМУМА ================= -->
+            <Border Background="#FF2A2A3C" CornerRadius="10" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Запчасти ниже минимума" Foreground="#FFEF5350"
+                               FontWeight="Bold" FontSize="16"/>
+                    <ItemsControl ItemsSource="{Binding LowStockParts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                                <Grid ColumnDefinitions="140,*,100,100" Margin="0,4">
+                                    <TextBlock Text="{Binding Article}" Foreground="White"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="White"/>
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding StockQuantity, StringFormat='ост: {0}'}"
+                                               Foreground="#FFEF5350"/>
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding MinStock, StringFormat='мин: {0}'}"
+                                               Foreground="White" Opacity="0.7"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

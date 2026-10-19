@@ -1,0 +1,266 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YchebPrivetPiter.ViewModels"
+        xmlns:d="using:YchebPrivetPiter.Data"
+        x:Class="YchebPrivetPiter.Views.WorkOrderEditWindow"
+        x:DataType="vm:WorkOrderEditViewModel"
+        Title="{Binding Title}"
+        Width="900" Height="700"
+        MinWidth="800" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        Background="#FF1E1E2E">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+
+        <!-- ================= ШАПКА ================= -->
+        <Border Grid.Row="0" Background="#FF2A2A3C" CornerRadius="10" Padding="16" Margin="0,0,0,12">
+            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="8">
+
+                <TextBlock Text="Клиент *" Foreground="White" Opacity="0.8" Grid.Row="0" Grid.Column="0"/>
+                <ComboBox Grid.Row="1" Grid.Column="0"
+                          ItemsSource="{Binding Clients}"
+                          SelectedItem="{Binding SelectedClient, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Client" x:DataType="d:Client">
+                            <TextBlock Text="{Binding FullName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Автомобиль *" Foreground="White" Opacity="0.8" Grid.Row="0" Grid.Column="1"/>
+                <ComboBox Grid.Row="1" Grid.Column="1"
+                          ItemsSource="{Binding ClientCars}"
+                          SelectedItem="{Binding SelectedCar, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding PlateNumber}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Механик" Foreground="White" Opacity="0.8" Grid.Row="0" Grid.Column="2"/>
+                <ComboBox Grid.Row="1" Grid.Column="2"
+                          ItemsSource="{Binding Mechanics}"
+                          SelectedItem="{Binding SelectedMechanic, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Mechanic" x:DataType="d:Mechanic">
+                            <TextBlock Text="{Binding User.FullName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+        </Border>
+
+        <!-- ================= ВКЛАДКИ ================= -->
+        <TabControl Grid.Row="1" Background="Transparent">
+
+            <!-- === УСЛУГИ === -->
+            <TabItem Header="Услуги">
+                <Grid RowDefinitions="Auto,*,Auto" Margin="0,12,0,0">
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+                        <ComboBox ItemsSource="{Binding AllServices}"
+                                  SelectedItem="{Binding NewService, Mode=TwoWay}"
+                                  Width="300">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="d:Service" x:DataType="d:Service">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text="{Binding BasePrice, StringFormat='{}{0:N2} ₽'}" Opacity="0.6"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="Кол-во:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+                        <NumericUpDown Value="{Binding NewServiceQty, Mode=TwoWay}" Minimum="1" Maximum="100"
+                                       Increment="1" FormatString="0" Width="90"/>
+
+                        <TextBlock Text="Цена:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+                        <NumericUpDown Value="{Binding NewServicePrice, Mode=TwoWay}" Minimum="0" Maximum="999999"
+                                       Increment="100" FormatString="0.00" Width="120"/>
+
+                        <Button Content="+ Добавить"
+                                Command="{Binding AddServiceCommand}"
+                                Background="#FF7C4DFF" Foreground="White" Padding="14,6"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Services}"
+                              SelectedItem="{Binding SelectedServiceRow, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              GridLinesVisibility="Horizontal"
+                              Background="Transparent"
+                              RowBackground="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Услуга" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderService" x:DataType="d:WorkOrderService">
+                                        <TextBlock Text="{Binding Service.Name}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Кол-во" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderService" x:DataType="d:WorkOrderService">
+                                        <TextBlock Text="{Binding Quantity}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Цена" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderService" x:DataType="d:WorkOrderService">
+                                        <TextBlock Text="{Binding UnitPrice, StringFormat='{}{0:N2}'}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Сумма" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderService" x:DataType="d:WorkOrderService">
+                                        <TextBlock Text="{Binding UnitPrice}" VerticalAlignment="Center" Margin="8,0" Opacity="0.6"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12" Margin="0,8,0,0">
+                        <Button Content="🗑 Удалить строку"
+                                Command="{Binding RemoveServiceCommand}"
+                                Background="Transparent" Foreground="#FFEF5350"
+                                BorderBrush="#FFEF5350" BorderThickness="1" Padding="14,6"/>
+                        <TextBlock Text="{Binding ServicesTotal, StringFormat='Услуги: {0:N2} ₽'}"
+                                   Foreground="White" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- === ЗАПЧАСТИ === -->
+            <TabItem Header="Запчасти">
+                <Grid RowDefinitions="Auto,*,Auto" Margin="0,12,0,0">
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+                        <ComboBox ItemsSource="{Binding AllParts}"
+                                  SelectedItem="{Binding NewPart, Mode=TwoWay}"
+                                  Width="300">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text="{Binding StockQuantity, StringFormat='(ост. {0})'}" Opacity="0.6"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="Кол-во:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+                        <NumericUpDown Value="{Binding NewPartQty, Mode=TwoWay}" Minimum="1" Maximum="100"
+                                       Increment="1" FormatString="0" Width="90"/>
+
+                        <TextBlock Text="Цена:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+                        <NumericUpDown Value="{Binding NewPartPrice, Mode=TwoWay}" Minimum="0" Maximum="999999"
+                                       Increment="100" FormatString="0.00" Width="120"/>
+
+                        <Button Content="+ Добавить"
+                                Command="{Binding AddPartCommand}"
+                                Background="#FF7C4DFF" Foreground="White" Padding="14,6"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Parts}"
+                              SelectedItem="{Binding SelectedPartRow, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              GridLinesVisibility="Horizontal"
+                              Background="Transparent"
+                              RowBackground="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Артикул" Width="140">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderPart" x:DataType="d:WorkOrderPart">
+                                        <TextBlock Text="{Binding Part.Article}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Название" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderPart" x:DataType="d:WorkOrderPart">
+                                        <TextBlock Text="{Binding Part.Name}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Кол-во" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderPart" x:DataType="d:WorkOrderPart">
+                                        <TextBlock Text="{Binding Quantity}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Цена" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="d:WorkOrderPart" x:DataType="d:WorkOrderPart">
+                                        <TextBlock Text="{Binding UnitPrice, StringFormat='{}{0:N2}'}" VerticalAlignment="Center" Margin="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12" Margin="0,8,0,0">
+                        <Button Content="🗑 Удалить строку"
+                                Command="{Binding RemovePartCommand}"
+                                Background="Transparent" Foreground="#FFEF5350"
+                                BorderBrush="#FFEF5350" BorderThickness="1" Padding="14,6"/>
+                        <TextBlock Text="{Binding PartsTotal, StringFormat='Запчасти: {0:N2} ₽'}"
+                                   Foreground="White" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- === ОСНОВНОЕ === -->
+            <TabItem Header="Основное">
+                <StackPanel Margin="0,12,0,0" Spacing="12">
+                    <TextBlock Text="Статус" Foreground="White" Opacity="0.8"/>
+                    <ComboBox ItemsSource="{Binding AllStatuses}"
+                              SelectedItem="{Binding Status, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"/>
+
+                    <TextBlock Text="Описание" Foreground="White" Opacity="0.8"/>
+                    <TextBox Text="{Binding Description, Mode=TwoWay}" AcceptsReturn="True"
+                             TextWrapping="Wrap" Height="180"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <!-- ================= ПОДВАЛ ================= -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,16,0,0">
+            <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock Text="{Binding GrandTotal, StringFormat='ИТОГО: {0:N2} ₽'}"
+                           Foreground="#FF4CD964" FontSize="20" FontWeight="Bold"/>
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#FFEF5350" TextWrapping="Wrap"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <!-- ▼▼▼ НОВАЯ КНОПКА ТЕХОСМОТРА ▼▼▼ -->
+                <Button Content="{Binding InspectionButtonText}"
+                        Click="OnInspectionClick"
+                        Background="#FF4CD964"
+                        Foreground="White"
+                        Padding="16,8"
+                        IsEnabled="{Binding !IsBusy}"/>
+
+                <Button Content="Отмена"
+                        Command="{Binding CancelCommand}"
+                        Background="Transparent" Foreground="White"
+                        BorderBrush="#55FFFFFF" BorderThickness="1" Padding="20,8"/>
+
+                <Button Content="Сохранить"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding !IsBusy}"
+                        Background="#FF7C4DFF" Foreground="White" Padding="20,8"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,125 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:controls="using:YchebPrivetPiter.Controls"
+             x:Class="YchebPrivetPiter.Views.CarListView"
+             x:DataType="vm:CarListViewModel">
+    <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,0,0,12">
+            <TextBlock Text="Автомобили" FontSize="22" FontWeight="Bold" Foreground="White"
+                       VerticalAlignment="Center"/>
+
+            <Button Grid.Column="1"
+                    Content="✎ Редактировать"
+                    Click="OnEditClick"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderBrush="#55FFFFFF"
+                    BorderThickness="1"
+                    Padding="14,6"
+                    Margin="0,0,8,0"/>
+
+            <Button Grid.Column="2"
+                    Content="🗑 Удалить"
+                    Click="OnDeleteClick"
+                    Background="Transparent"
+                    Foreground="#FFEF5350"
+                    BorderBrush="#FFEF5350"
+                    BorderThickness="1"
+                    Padding="14,6"
+                    Margin="0,0,8,0"/>
+
+            <Button Grid.Column="3"
+                    Content="+ Новый автомобиль"
+                    Click="OnAddClick"
+                    Background="#FF7C4DFF"
+                    Foreground="White"
+                    Padding="14,6"/>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
+            <controls:SearchBox Text="{Binding Search}" Watermark="VIN / госномер / модель / марка" Width="360"/>
+            <CheckBox Content="По убыванию" IsChecked="{Binding SortDesc}"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedCar}"
+                  DoubleTapped="OnRowDoubleTapped"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  RowBackground="Transparent">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="Клиент" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding Client.FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Марка" Width="140">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding Brand.Name}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Модель" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding Model}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Год" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding ProductionYear}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="VIN" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding Vin}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Госномер" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding PlateNumber}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Пробег" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <TextBlock Text="{Binding Mileage}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <controls:Paginator DockPanel.Dock="Bottom" Margin="0,12,0,0"/>
+    </DockPanel>
+</UserControl>

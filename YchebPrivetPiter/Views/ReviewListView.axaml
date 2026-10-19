@@ -1,0 +1,87 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:controls="using:YchebPrivetPiter.Controls"
+             x:Class="YchebPrivetPiter.Views.ReviewListView"
+             x:DataType="vm:ReviewListViewModel">
+    <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+            <TextBlock Text="Отзывы клиентов" FontSize="22" FontWeight="Bold"
+                       Foreground="White" VerticalAlignment="Center"/>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,12">
+            <TextBlock Text="Рейтинг от:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+            <ComboBox SelectedItem="{Binding MinRating}"
+                      ItemsSource="{Binding Ratings}"
+                      Width="90"/>
+
+            <TextBlock Text="до:" VerticalAlignment="Center" Foreground="White" Opacity="0.8"/>
+            <ComboBox SelectedItem="{Binding MaxRating}"
+                      ItemsSource="{Binding Ratings}"
+                      Width="90"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Items}"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  RowBackground="Transparent">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="Дата" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Review" x:DataType="d:Review">
+                            <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Клиент" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Review" x:DataType="d:Review">
+                            <TextBlock Text="{Binding Client.FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Заказ" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Review" x:DataType="d:Review">
+                            <TextBlock Text="{Binding WorkOrderId, StringFormat='№{0}'}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Оценка" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Review" x:DataType="d:Review">
+                            <TextBlock Text="{Binding Rating, StringFormat='{}{0} ★'}"
+                                       Foreground="#FFF3CC8D" FontWeight="Bold"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Комментарий" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Review" x:DataType="d:Review">
+                            <TextBlock Text="{Binding Comment}"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <controls:Paginator DockPanel.Dock="Bottom" Margin="0,12,0,0"/>
+    </DockPanel>
+</UserControl>

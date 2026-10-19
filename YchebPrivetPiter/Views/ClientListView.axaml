@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:controls="using:YchebPrivetPiter.Controls"
+             x:Class="YchebPrivetPiter.Views.ClientListView"
+             x:DataType="vm:ClientListViewModel">
+    <DockPanel LastChildFill="True">
+
+       <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,0,0,12">
+    <TextBlock Text="Клиенты" FontSize="22" FontWeight="Bold" Foreground="White"
+               VerticalAlignment="Center"/>
+
+    <Button Grid.Column="1"
+            Content="✎ Редактировать"
+            Click="OnEditClick"
+            Background="Transparent"
+            Foreground="White"
+            BorderBrush="#55FFFFFF"
+            BorderThickness="1"
+            Padding="14,6"
+            Margin="0,0,8,0"/>
+
+    <Button Grid.Column="2"
+            Content="🗑 Удалить"
+            Click="OnDeleteClick"
+            Background="Transparent"
+            Foreground="#FFEF5350"
+            BorderBrush="#FFEF5350"
+            BorderThickness="1"
+            Padding="14,6"
+            Margin="0,0,8,0"/>
+
+    <Button Grid.Column="3"
+            Content="+ Новый клиент"
+            Click="OnAddClick"
+            Background="#FF7C4DFF"
+            Foreground="White"
+            Padding="14,6"/>
+</Grid>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
+            <controls:SearchBox Text="{Binding Search}" Watermark="Имя / телефон / email" Width="320"/>
+            <CheckBox Content="По убыванию" IsChecked="{Binding SortDesc}"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedClient}"
+                  DoubleTapped="OnRowDoubleTapped"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  RowBackground="Transparent">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="ФИО" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Client" x:DataType="d:Client">
+                            <TextBlock Text="{Binding FullName}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Телефон" Width="180">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Client" x:DataType="d:Client">
+                            <TextBlock Text="{Binding Phone}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Email" Width="220">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Client" x:DataType="d:Client">
+                            <TextBlock Text="{Binding Email}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Адрес" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Client" x:DataType="d:Client">
+                            <TextBlock Text="{Binding Address}"
+                                       VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <controls:Paginator DockPanel.Dock="Bottom" Margin="0,12,0,0"/>
+    </DockPanel>
+</UserControl>

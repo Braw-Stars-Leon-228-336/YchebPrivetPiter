@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:d="using:YchebPrivetPiter.Data"
+             xmlns:controls="using:YchebPrivetPiter.Controls"
+             x:Class="YchebPrivetPiter.Views.PartListView"
+             x:DataType="vm:PartListViewModel">
+    <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+            <TextBlock Text="Запчасти" FontSize="22" FontWeight="Bold" Foreground="White"/>
+            <Button Grid.Column="1" Content="+ Новая запчасть"
+                    Background="#FF7C4DFF" Foreground="White" Padding="14,6"/>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
+            <controls:SearchBox Text="{Binding Search}" Watermark="Название / артикул" Width="320"/>
+            <CheckBox Content="Только ниже минимума" IsChecked="{Binding OnlyLowStock}"/>
+            <CheckBox Content="По убыванию" IsChecked="{Binding SortDesc}"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Items}"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  RowBackground="Transparent">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="Артикул" Width="140">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding Article}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Название" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Поставщик" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding Supplier.Name}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Закупка" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding PurchasePrice}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Продажа" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding SalePrice}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Остаток" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding StockQuantity}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Мин." Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="d:Part" x:DataType="d:Part">
+                            <TextBlock Text="{Binding MinStock}" VerticalAlignment="Center" Margin="8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <controls:Paginator DockPanel.Dock="Bottom" Margin="0,12,0,0"/>
+    </DockPanel>
+</UserControl>

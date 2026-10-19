@@ -1,0 +1,44 @@
+﻿<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             xmlns:views="using:YchebPrivetPiter.Views"
+             x:Class="YchebPrivetPiter.App"
+             RequestedThemeVariant="Dark">
+    <Application.Styles>
+        <FluentTheme/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    </Application.Styles>
+
+    <Application.DataTemplates>
+        <DataTemplate DataType="vm:ClientListViewModel">
+            <views:ClientListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:CarListViewModel">
+            <views:CarListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:AppointmentListViewModel">
+            <views:AppointmentListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:WorkOrderListViewModel">
+            <views:WorkOrderListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:InvoiceListViewModel">
+            <views:InvoiceListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:PaymentListViewModel">
+            <views:PaymentListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:PartListViewModel">
+            <views:PartListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:DashboardViewModel">
+            <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:ReviewListViewModel">
+            <views:ReviewListView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:MechanicScheduleListViewModel">
+            <views:MechanicScheduleListView/>
+        </DataTemplate>
+    </Application.DataTemplates>
+</Application>

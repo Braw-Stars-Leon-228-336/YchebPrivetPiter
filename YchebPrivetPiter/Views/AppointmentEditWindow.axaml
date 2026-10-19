@@ -1,0 +1,127 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YchebPrivetPiter.ViewModels"
+        xmlns:d="using:YchebPrivetPiter.Data"
+        x:Class="YchebPrivetPiter.Views.AppointmentEditWindow"
+        x:DataType="vm:AppointmentEditViewModel"
+        Title="{Binding Title}"
+        Width="560" Height="720"
+        MinWidth="500" MinHeight="640"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#FF1E1E2E">
+    <Grid RowDefinitions="*,Auto" Margin="20">
+
+        <ScrollViewer Grid.Row="0">
+            <StackPanel Spacing="12">
+
+                <TextBlock Text="Клиент *" Foreground="White" Opacity="0.8"/>
+                <ComboBox ItemsSource="{Binding Clients}"
+                          SelectedItem="{Binding SelectedClient}"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Client" x:DataType="d:Client">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding FullName}"/>
+                                <TextBlock Text="{Binding Phone}" Opacity="0.6"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Автомобиль *" Foreground="White" Opacity="0.8"/>
+                <ComboBox ItemsSource="{Binding ClientCars}"
+                          SelectedItem="{Binding SelectedCar}"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Car" x:DataType="d:Car">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding Brand.Name}"/>
+                                <TextBlock Text="{Binding Model}"/>
+                                <TextBlock Text="{Binding PlateNumber}" Opacity="0.6"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Услуга *" Foreground="White" Opacity="0.8"/>
+                <ComboBox ItemsSource="{Binding Services}"
+                          SelectedItem="{Binding SelectedService}"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Service" x:DataType="d:Service">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding BasePrice, StringFormat='{}{0:N2} ₽'}" Opacity="0.6"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Grid ColumnDefinitions="*,12,*">
+                    <StackPanel Grid.Column="0" Spacing="6">
+                        <TextBlock Text="Дата *" Foreground="White" Opacity="0.8"/>
+                        <DatePicker SelectedDate="{Binding Date}" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="6">
+                        <TextBlock Text="Время *" Foreground="White" Opacity="0.8"/>
+                        <TimePicker SelectedTime="{Binding Time}" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Механик" Foreground="White" Opacity="0.8"/>
+                <ComboBox ItemsSource="{Binding Mechanics}"
+                          SelectedItem="{Binding SelectedMechanic}"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="d:Mechanic" x:DataType="d:Mechanic">
+                            <TextBlock Text="{Binding User.FullName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Ремонтное место" Foreground="White" Opacity="0.8"/>
+                <ComboBox ItemsSource="{Binding RepairPlaces}"
+                          SelectedItem="{Binding SelectedPlace}"
+                          HorizontalAlignment="Stretch"
+                          DisplayMemberBinding="{Binding Name}"/>
+
+                <TextBlock Text="Статус" Foreground="White" Opacity="0.8"/>
+                <ComboBox ItemsSource="{Binding AllStatuses}"
+                          SelectedItem="{Binding SelectedStatus}"
+                          HorizontalAlignment="Stretch"/>
+
+                <TextBlock Text="Комментарий" Foreground="White" Opacity="0.8"/>
+                <TextBox Text="{Binding Comment}"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Height="80"/>
+
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#FFEF5350"
+                           TextWrapping="Wrap"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="10"
+                    Margin="0,16,0,0">
+            <Button Content="Отмена"
+                    Command="{Binding CancelCommand}"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderBrush="#55FFFFFF"
+                    BorderThickness="1"
+                    Padding="20,8"/>
+            <Button Content="Сохранить"
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding !IsBusy}"
+                    Background="#FF7C4DFF"
+                    Foreground="White"
+                    Padding="20,8"/>
+        </StackPanel>
+    </Grid>
+</Window>

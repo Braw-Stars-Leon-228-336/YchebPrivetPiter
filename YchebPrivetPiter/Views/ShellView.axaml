@@ -1,0 +1,76 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YchebPrivetPiter.ViewModels"
+             x:Class="YchebPrivetPiter.Views.ShellView"
+             x:DataType="vm:ShellViewModel">
+    <DockPanel LastChildFill="True">
+
+        <!-- ================= HEADER ================= -->
+        <Border DockPanel.Dock="Top" Background="#FF2A2A3C" Padding="16,12">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <TextBlock Text="🚗 Система управления автосервисом"
+                           FontSize="16" FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12">
+                    <TextBlock Text="{Binding UserDisplay}"
+                               Foreground="White" Opacity="0.85"
+                               VerticalAlignment="Center"/>
+                    <Button Content="Выйти"
+                            Command="{Binding LogoutCommand}"
+                            Background="Transparent"
+                            Foreground="#FFEF5350"
+                            BorderBrush="#FFEF5350" BorderThickness="1"
+                            Padding="12,4"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ================= STATUS BAR ================= -->
+        <Border DockPanel.Dock="Bottom" Background="#FF2A2A3C" Padding="16,6">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Готово" Foreground="White" Opacity="0.7" FontSize="12"/>
+                <TextBlock Grid.Column="1" Text="{Binding ClockText}"
+                           Foreground="White" Opacity="0.7" FontSize="12"/>
+            </Grid>
+        </Border>
+
+        <!-- ================= SIDEBAR + WORK AREA ================= -->
+        <Grid ColumnDefinitions="240,*">
+
+            <!-- Sidebar -->
+            <Border Grid.Column="0" Background="#FF23233A" Padding="8">
+                <ItemsControl ItemsSource="{Binding MenuItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:MenuItem">
+                            <Button Classes="menu"
+                                    Command="{Binding $parent[UserControl].((vm:ShellViewModel)DataContext).SelectCommand}"
+                                    CommandParameter="{Binding}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Padding="14,10" Margin="0,2"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="{Binding Icon}" FontSize="16"/>
+                                    <TextBlock Text="{Binding Title}" Foreground="White" FontSize="14"/>
+                                </StackPanel>
+                                <Button.Styles>
+                                    <Style Selector="Button.menu:pointerover">
+                                        <Setter Property="Background" Value="#33FFFFFF"/>
+                                    </Style>
+                                </Button.Styles>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <!-- Work area -->
+            <Border Grid.Column="1" Background="#FF1E1E2E" Padding="16">
+                <ContentControl Content="{Binding CurrentPage}"/>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

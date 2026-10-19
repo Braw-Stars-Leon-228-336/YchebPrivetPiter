@@ -1,0 +1,74 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YchebPrivetPiter.ViewModels"
+        x:Class="YchebPrivetPiter.Views.InspectionEditWindow"
+        x:DataType="vm:InspectionEditViewModel"
+        Title="{Binding Title}"
+        Width="560" Height="640"
+        MinWidth="480" MinHeight="580"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#FF1E1E2E">
+    <Grid RowDefinitions="*,Auto" Margin="20">
+
+        <ScrollViewer Grid.Row="0">
+            <StackPanel Spacing="12">
+
+                <TextBlock Text="🔧 Двигатель" Foreground="White" FontWeight="Bold"/>
+                <TextBox Text="{Binding EngineCondition}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="70"
+                         Watermark="Состояние ДВС, замечания..."/>
+
+                <TextBlock Text="🛑 Тормозная система" Foreground="White" FontWeight="Bold"/>
+                <TextBox Text="{Binding BrakeCondition}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="70"
+                         Watermark="Износ колодок, дисков, состояние жидкости..."/>
+
+                <TextBlock Text="🔩 Подвеска" Foreground="White" FontWeight="Bold"/>
+                <TextBox Text="{Binding SuspensionCondition}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="70"
+                         Watermark="Амортизаторы, сайлентблоки, стойки..."/>
+
+                <TextBlock Text="⚡ Электрооборудование" Foreground="White" FontWeight="Bold"/>
+                <TextBox Text="{Binding ElectricalCondition}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="70"
+                         Watermark="АКБ, генератор, освещение, ошибки ЭБУ..."/>
+
+                <TextBlock Text="📋 Рекомендации клиенту" Foreground="White" FontWeight="Bold"/>
+                <TextBox Text="{Binding Recommendations}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="90"
+                         Watermark="Что рекомендуете сделать в следующий раз..."/>
+
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#FFEF5350"
+                           TextWrapping="Wrap"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="10"
+                    Margin="0,16,0,0">
+            <Button Content="Отмена"
+                    Command="{Binding CancelCommand}"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderBrush="#55FFFFFF"
+                    BorderThickness="1"
+                    Padding="20,8"/>
+            <Button Content="Сохранить"
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding !IsBusy}"
+                    Background="#FF7C4DFF"
+                    Foreground="White"
+                    Padding="20,8"/>
+        </StackPanel>
+    </Grid>
+</Window>
